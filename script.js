@@ -31,7 +31,12 @@ let app = new Vue({
     this.read();
     this.editor.on("change", ()=>{
       this.read();
-    })
+    });
+    setTimeout(()=>{
+      requestAnimationFrame(()=>{
+        document.body.classList.remove("hidden");
+      })
+    },10)
   },
   methods: {
     // grab JSON from editor, clear the path and update the reader

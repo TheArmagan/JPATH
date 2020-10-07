@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./style.css" />
 </head>
 
-<body class="grey darken-3">
+<body class="grey darken-3 hidden">
     <div id="app">
 
         <div class="row">
@@ -55,7 +55,7 @@
                                         <div class="row" id="path-container">
                                             <div class="col s10 valign-wrapper">
                                                 <span class="label">PATH:</span>
-                                                <span class="value">{{path ? path : "-path-"}}</span>
+                                                <span class="value">{{path ? path : defaultPath}}</span>
                                             </div>
                                             <div class="col s1">
                                                 <button class="btn btn-small waves-effect waves-light grey" v-clipboard:copy="path" @click="copied">Copy</button>

@@ -13,6 +13,18 @@
 	height: 100%;
 }
 
+body {
+	pointer-events: all;
+	opacity: 1 !important;
+	transition: opacity 1000ms ease-in-out;
+}
+
+body.hidden {
+	pointer-events: none;
+	opacity: 0 !important;
+	transition: opacity 1000ms ease-in-out;
+}
+
 .pad-fix {
     padding: 1rem !important;
 }
