@@ -1,4 +1,5 @@
-// main vue app
+const _url = new URL(location.href);
+
 let app = new Vue({
   el: "#app",
   data: {
@@ -32,11 +33,16 @@ let app = new Vue({
     this.editor.on("change", ()=>{
       this.read();
     });
+
+    if (_url.searchParams.has("json")) {
+      this.editor.setValue(_url.searchParams.set("json"));
+    }
+
     setTimeout(()=>{
       requestAnimationFrame(()=>{
         document.body.classList.remove("hidden");
       })
-    },10)
+    },50)
   },
   methods: {
     // grab JSON from editor, clear the path and update the reader
