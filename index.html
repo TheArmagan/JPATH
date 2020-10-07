@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Pson Fath Jinder" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pson Fath Jinder</title>
+    <link rel="icon" type="image/png" href="./images/favicon.png" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="grey darken-3">
+    <div id="app">
+
+        <div class="row">
+            <nav class="grey darken-4">
+                <div class="nav-wrapper">
+                    <a @click="onTitleClick" href="#" class="left brand-logo">{{appName}}</a>
+                </div>
+            </nav>
+            <div>
+                <div class="row">
+                    <div class="col s5">
+                        <div class="pad-fix card-panel grey darken-4 container-card">
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="pad-fix card-panel grey darken-3">
+                                        <button v-if="!!error" @click="editorTryToFix" class="editor-action-btn btn btn-small waves-effect waves-light teal accent-2 black-text">Try to Fix</button>
+                                        <button @click="editorPrettify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Prettify</button>
+                                        <button @click="editorMinify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Minify</button>
+                                        
+                                        <button @click="expandAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Expand</button>
+                                        <button @click="collapseAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Collapse</button>
+                                    </div>
+                                </div>
+                                <div class="col s12">
+
+                                    <div id="text-editor"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s7">
+                        <div class="pad-fix card-panel grey darken-4 container-card">
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="pad-fix card-panel grey darken-3">
+
+                                        
+                                        <div class="row" id="path-container">
+                                            <div class="col s10 valign-wrapper">
+                                                <span class="label">PATH:</span>
+                                                <span class="value">{{path ? path : "-path-"}}</span>
+                                            </div>
+                                            <div class="col s1">
+                                                <button class="btn btn-small waves-effect waves-light grey" v-clipboard:copy="path" @click="copied">Copy</button>
+                                            </div>
+                                        </div>
+                                        
+
+
+                                    </div>
+                                </div>
+                                <div id="list-div" class="col s12">
+
+
+                                    <div v-if="!!error" id="error-message">
+                                        {{error}}
+                                    </div>
+
+                                    <json-tree v-else :this-json="json" :original-json="json" :root="true" :open="true"
+                                        :child-open="false" :close="close" @update="updatePath">
+                                    </json-tree>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div style="display: none" type="x-template" id="json-tree">
+        <div :class="{ 'root': root }">
+            <div v-for="(item, keyName) in thisJson">
+                <json-key v-if="isOpen" :close="close" :open="isChildOpen" :child-open="app.allOpen" :key-name="keyName"
+                    :item="item" :original-json="originalJson" @check="clicked(keyName)" @update="sendUpdate">
+                </json-key>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: none" type="x-template" id="json-key">
+        <div class="json-key">
+
+            <div class="property" :class="{ 'selected': selected, 'has-more': typeof item === 'object', 'is-open': isOpen, 'is-not-open': !isOpen, 'openable': typeof item === 'object' }" @click="clicked(keyName)">
+
+                <span class="state-arrow">
+                    {{typeof item === 'object' && isOpen ? "&#9660;" : typeof item === 'object' && !isOpen ? "&#9654;" : "-"}}
+                </span>
+
+                <div class="key-name">
+                    {{ keyName }}
+                </div>
+
+                <div class="value-type">
+                    {{ getObjectName(item) == "Array" ? `Array[${item.length}]` : getObjectName(item)  }}
+                </div>
+
+                <div v-if="typeof item !== 'object'" class="value">
+                    {{ selected ? item : item.length > 16 ? item.slice(0, 64)+"…" : item }}
+                </div>
+
+            </div>
+
+            <json-tree v-if="typeof item === 'object' && isOpen" :close="close" :open="isOpen" :child-open="false"
+                :original-json="originalJson" :this-json="item" :root="false" @update="sendUpdate">
+            </json-tree>
+
+        </div>
+
+
+        <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.min.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/Inndy/vue-clipboard2/master/dist/vue-clipboard.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <link rel="stylesheet" href="/codemirror/lib/codemirror.css" />
+        <link rel="stylesheet" href="/codemirror/theme/dracula.css" />
+        <script src="/codemirror/lib/codemirror.js"></script>
+        <script src="/codemirror/mode/javascript/javascript.js"></script>
+        <script src="script.js"></script>
+</body>
+
+</html>

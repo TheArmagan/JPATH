@@ -1,0 +1,179 @@
+/* TODO: Fix overflows. (idk how btw) */
+
+.CodeMirror {
+	width: 100%;
+	height: max-content;
+	font-family: monaco, Consolas, Menlo, Courier, monospace;
+	font-size: 1.2rem;
+	line-height: 1.7rem;
+	height: 75vh !important;
+}
+
+#text-editor {
+	width: 100%;
+	height: 100%;
+}
+
+.pad-fix {
+    padding: 1rem !important;
+}
+
+.pad0 {
+    padding: 0 !important;
+}
+
+.mar0 {
+    margin: 0 !important;
+}
+
+.row {
+    margin-bottom: 0;
+}
+
+.brand-logo {
+	margin-left: 1rem;
+}
+
+#error-message {
+	font-size: 1rem;
+	font-weight: 500;
+	color: #F16161;
+}
+
+#path-container {
+	position: relative;
+	color: white;
+}
+
+#path-container .label {
+	font-weight: bold;
+
+}
+
+#path-container .value {
+	margin-left: 0.4rem;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+#path-container button {
+	position: absolute;
+	right: 1rem;
+	bottom: -24%;
+	width: 6rem;
+}
+
+.editor-action-btn:not(:first-child) {
+	margin-left: 0.4rem;
+}
+
+.json-key {
+	color: #f0f0f0;
+	padding-left: 0.4rem;
+}
+
+.has-more {
+	border-bottom: 2px solid #b4b4b4;
+}
+
+.json-key .property {
+	cursor: pointer;
+	position: relative;
+	background-color: #424242;
+	padding: 0.4rem;
+}
+
+.json-key .property:hover {
+	background-color: #646464;
+}
+
+.selected {
+	background-color: #646464 !important;
+}
+
+.json-key .property * {
+	display: inline-block;
+}
+
+.json-key .property *:not(:first-child) {
+	padding-left: 0.4rem;
+}
+
+.json-key .property .state-arrow {
+	width: 0.6rem;
+	height: 0.6rem;
+	opacity: 0.8;
+}
+
+.json-key .property .key-name {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.json-key .property .value {
+	opacity: 0.9;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.json-key .property.selected .value {
+	background-color: #212121;
+	color: #e4e4e4;
+	margin-top: 0.2rem;
+	padding: 0.4rem;
+	border-radius: 0.2rem;
+	display: block;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.json-key .property .value-type {
+	position: absolute;
+	right: 1rem;
+	opacity: 0.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+::-webkit-scrollbar {
+	width: 0.5rem;
+	height: 0.5rem;
+}
+  
+::-webkit-scrollbar-track {
+background: #424242; 
+}
+
+::-webkit-scrollbar-thumb {
+background: #212121;
+
+}
