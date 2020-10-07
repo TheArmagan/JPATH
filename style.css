@@ -41,8 +41,8 @@ body.hidden {
     margin-bottom: 0;
 }
 
-.brand-logo {
-	margin-left: 1rem;
+.nav-wrapper {
+	padding: 0 1rem;
 }
 
 #error-message {

@@ -34,8 +34,9 @@ let app = new Vue({
       this.read();
     });
 
-    if (_url.searchParams.has("json")) {
-      this.editor.setValue(_url.searchParams.set("json"));
+    if (_url.searchParams.get("json")) {
+      this.editor.setValue(_url.searchParams.get("json"));
+      this.editorPrettify(true);
     }
 
     setTimeout(()=>{
@@ -45,14 +46,10 @@ let app = new Vue({
     },50)
   },
   methods: {
-    // grab JSON from editor, clear the path and update the reader
     read: function() {
       try {
         this.path = "";
         let newJson = JSON.parse(this.editor.getValue())
-        // collapse the reader view unless the user is editing the existing JSON in the editor:
-        // if the key at [0] of the previous JSON and the new JSON are the same, then the user is probably editing,
-        // rather than copy-pasting a new JSON object
         if (Object.keys(newJson)[0] !== Object.keys(this.json)[0]) {
           this.close = !this.close
         }
@@ -60,7 +57,6 @@ let app = new Vue({
         this.json = newJson;
         this.error = "";
       }
-      // error handling for JSON.parse()
       catch(error) {
         this.error = `[EXPLICIT] ${error.name}: ${error.message}`;
       }
@@ -71,9 +67,9 @@ let app = new Vue({
     copied: function () {
       M.toast({html:"Copied!", classes: "rounded"})
     },
-    editorPrettify: function () {
+    editorPrettify: function (hideToast) {
       this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()),null,2));
-      M.toast({html:"Prettified!", classes: "rounded"});
+      if (!hideToast) M.toast({html:"Prettified!", classes: "rounded"});
     },
     editorMinify: function () {
       this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()),null,0));
