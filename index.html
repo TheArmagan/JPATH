@@ -108,8 +108,8 @@
                     {{typeof item === 'object' && isOpen ? "&#9660;" : typeof item === 'object' && !isOpen ? "&#9654;" : "-"}}
                 </span>
 
-                <div class="key-name">
-                    {{ keyName }}
+                <div class="key-name" :title="keyName">
+                    {{ keyName.length >= 64 ? keyName.slice(0, 64)+"…" : keyName }}
                 </div>
 
                 <div class="value-type">
@@ -117,7 +117,7 @@
                 </div>
 
                 <div v-if="typeof item !== 'object'" class="value">
-                    {{ selected ? item : item.length > 16 ? item.slice(0, 64)+"…" : item }}
+                    {{ selected ? item : item.length >= 64 ? item.slice(0, 64)+"…" : item }}
                 </div>
 
             </div>
