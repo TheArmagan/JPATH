@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta property="og:site_name" content="JSON Path Finder" />
     <meta property="og:title" content="Pson Fath Jinder" />
-    <meta property="og:image" content="./icons/icon-1024x1024.png" />
+    <meta property="og:image" content="https://thearmagan.github.io/pson-fath-jinder/icons/icon-1024x1024.png" />
     <link rel="icon" type="image/png" href="./icons/icon-256x256.png" />
     <meta property="og:description" content="Good stuff." />
     <meta property="theme-color" content="#212121" />
@@ -40,16 +40,13 @@
                                     <div class="pad-fix card-panel grey darken-3">
                                         <button v-if="!!error" @click="editorTryToFix" class="editor-action-btn btn btn-small waves-effect waves-light teal accent-2 black-text">Try to Fix</button>
                                         <button @click="editorPrettify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Prettify</button>
-                                        <button @click="editorMinify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Minify</button>
-                                        
+                                        <button @click="editorMinify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Minify</button> 
                                         <button @click="expandAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Expand</button>
                                         <button @click="collapseAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Collapse</button>
                                     </div>
                                 </div>
                                 <div class="col s12">
-
                                     <div id="text-editor"></div>
-
                                 </div>
                             </div>
                         </div>
@@ -82,7 +79,7 @@
                                         {{error}}
                                     </div>
 
-                                    <json-tree v-else :this-json="json" :original-json="json" :root="true" :open="true"
+                                    <json-tree v-if="!error" :this-json="json" :original-json="json" :root="true" :open="true"
                                         :child-open="false" :close="close" @update="updatePath">
                                     </json-tree>
 
@@ -114,7 +111,7 @@
             <div class="property" :class="{ 'selected': selected, 'has-more': typeof item === 'object', 'is-open': isOpen, 'is-not-open': !isOpen, 'openable': typeof item === 'object' }" @click="clicked(keyName)">
 
                 <span class="state-arrow">
-                    {{typeof item === 'object' && isOpen ? "&#9660;" : typeof item === 'object' && !isOpen ? "&#9654;" : "-"}}
+                    {{typeof item === 'object' && getObjectName(item) != "Null" && isOpen ? "&#9660;" : typeof item === 'object' && getObjectName(item) != "Null" && !isOpen ? "&#9654;" : "-"}}
                 </span>
 
                 <div class="key-name" :title="keyName">

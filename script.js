@@ -25,7 +25,7 @@ let app = new Vue({
     appName: "Pson Fath Jinder"
   },
   // initialize ace editor and load the reader
-  mounted: function() {
+  mounted: async function() {
     this.editor = CodeMirror(document.querySelector("#text-editor"),{
       value: JSON.stringify(this.json, null, 2),
       mode: {name:"javascript",json:true},
@@ -43,9 +43,12 @@ let app = new Vue({
 
     if (_url.searchParams.get("json")) {
       this.editor.setValue(_url.searchParams.get("json"));
-      this.editorPrettify(true);
+    } else if (_url.searchParams.get("fetch")) {
+      let fetched = await fetch(_url.searchParams.get("fetch"), JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d=>d.text());
+      this.editor.setValue(fetched);
     }
-
+    this.editorPrettify(true);
+      
     setTimeout(()=>{
       requestAnimationFrame(()=>{
         document.body.classList.remove("hidden");
@@ -102,19 +105,17 @@ let app = new Vue({
         this.setAPPName("Pson Fath Jinder");
       }, 10*1000)
     },
-    expandAll: function (max=10) {
+    expandAll: function () {
       function __toggle(i=0) {
         document.querySelectorAll(".json-key .is-not-open").forEach((e)=>e.click());
-        if (i < max) setTimeout(()=>{__toggle(++i)},10)
+        if (document.querySelectorAll(".json-key .is-not-open").length != 0) {
+          setTimeout(()=>{__toggle(++i)},10)
+        }
       }
       __toggle()
     },
     collapseAll: function (max=10) {
-      function __toggle(i=0) {
-        document.querySelectorAll(".json-key .is-open").forEach((e)=>e.click());
-        if (i < max) setTimeout(()=>{__toggle(++i)},10)
-      }
-      __toggle()
+      document.querySelectorAll(".json-key .is-open").forEach((e)=>e.click());
     }
   },
   watch: {
