@@ -7,6 +7,9 @@
 - PWA Application
 - Dark theme
 
+## TODO
+ - Make app mobile friendly..
+
 [Click here to open.](https://thearmagan.github.io/pson-fath-jinder)
 [![Preview](https://i.imgur.com/HN7LYct.png)](https://thearmagan.github.io/pson-fath-jinder)
 
