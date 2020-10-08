@@ -2,147 +2,174 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta property="og:site_name" content="JSON Path Finder" />
-    <meta property="og:title" content="Pson Fath Jinder" />
-    <meta property="og:image" content="https://thearmagan.github.io/pson-fath-jinder/icons/icon-1024x1024.png" />
-    <link rel="icon" type="image/png" href="./icons/icon-256x256.png" />
-    <meta property="og:description" content="Good stuff." />
-    <meta property="theme-color" content="#212121" />
-    <meta name="description" content="JSON Path Finder, Pson Fath Jinder" />
-    <link rel="manifest" href="./manifest.json">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pson Fath Jinder</title>
+  <meta charset="utf-8" />
+  <meta property="og:site_name" content="JSON Path Finder" />
+  <meta property="og:title" content="Pson Fath Jinder" />
+  <meta property="og:image" content="https://thearmagan.github.io/pson-fath-jinder/icons/icon-1024x1024.png" />
+  <link rel="icon" type="image/png" href="./icons/icon-256x256.png" />
+  <meta property="og:description" content="Good stuff." />
+  <meta property="theme-color" content="#212121" />
+  <meta name="description" content="JSON Path Finder, Pson Fath Jinder" />
+  <link rel="manifest" href="./manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pson Fath Jinder</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="./style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="./style.css" />
+
 </head>
 
 <body class="grey darken-3 hidden">
-    <div id="app">
+  <div id="app">
 
-        <div class="row">
-            <nav class="grey darken-4">
-                <div class="nav-wrapper">
-                    <a @click="onTitleClick" href="#" class="left brand-logo">{{appName}}</a>
-                    <ul class="right hide-on-med-and-down">
-                        <li><a href="//github.com/TheArmagan/pson-fath-jinder">Github</a></li>
-                    </ul>
+    <nav class="grey darken-4">
+      <div class="nav-wrapper">
+        <a @click="onTitleClick" href="#" class="left brand-logo">{{appName}}</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a onclick="app.isOptionsOpen = !app.isOptionsOpen"
+              href="#">{{isOptionsOpen ? "Home Page" : "Options"}}</a></li>
+          <li><a href="//github.com/TheArmagan/pson-fath-jinder">Github</a></li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <div v-show="!isOptionsOpen">
+      <div class="row">
+        <div class="col s12 l5">
+          <div id="editorArea" class="pad-fix card-panel grey darken-4 container-card">
+            <div class="row">
+              <div class="col s12">
+                <div class="pad-fix card-panel grey darken-3">
+                  <button v-if="!!error" @click="editorTryToFix"
+                    class="editor-action-btn btn btn-small waves-effect waves-light teal accent-2 black-text">Fix</button>
+                  <button @click="openFile"
+                  class="editor-action-btn btn btn-small waves-effect waves-light grey">Open</button>
+                  <button @click="editorPrettify"
+                    class="editor-action-btn btn btn-small waves-effect waves-light grey">Prettify</button>
+                  <button @click="editorMinify"
+                    class="editor-action-btn btn btn-small waves-effect waves-light grey">Minify</button>
+
+                  <button @click="expandAll"
+                    class="right editor-action-btn btn btn-small waves-effect waves-light grey">Expand</button>
+                  <button @click="collapseAll"
+                    class="right editor-action-btn btn btn-small waves-effect waves-light grey">Collapse</button>
                 </div>
-            </nav>
-            <div>
-                <div class="row">
-                    <div class="col s5">
-                        <div class="pad-fix card-panel grey darken-4 container-card">
-                            <div class="row">
-                                <div class="col s12">
-                                    <div class="pad-fix card-panel grey darken-3">
-                                        <button v-if="!!error" @click="editorTryToFix" class="editor-action-btn btn btn-small waves-effect waves-light teal accent-2 black-text">Try to Fix</button>
-                                        <button @click="editorPrettify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Prettify</button>
-                                        <button @click="editorMinify" class="editor-action-btn btn btn-small waves-effect waves-light grey">Minify</button> 
-                                        <button @click="expandAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Expand</button>
-                                        <button @click="collapseAll" class="right editor-action-btn btn btn-small waves-effect waves-light grey">Collapse</button>
-                                    </div>
-                                </div>
-                                <div class="col s12">
-                                    <div id="text-editor"></div>
-                                </div>
-                            </div>
-                        </div>
+              </div>
+              <div class="col s12">
+                <div id="text-editor"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 l7">
+          <div id="viewerArea" class="pad-fix card-panel grey darken-4 container-card">
+            <div class="row">
+              <div class="col s12">
+                <div class="pad-fix card-panel grey darken-3">
+
+
+                  <div class="row" id="path-container">
+                    <div class="col s10 valign-wrapper">
+                      <span class="label">PATH:</span>
+                      <span class="value">{{path ? path : defaultPath}}</span>
                     </div>
-                    <div class="col s7">
-                        <div class="pad-fix card-panel grey darken-4 container-card">
-                            <div class="row">
-                                <div class="col s12">
-                                    <div class="pad-fix card-panel grey darken-3">
-
-                                        
-                                        <div class="row" id="path-container">
-                                            <div class="col s10 valign-wrapper">
-                                                <span class="label">PATH:</span>
-                                                <span class="value">{{path ? path : defaultPath}}</span>
-                                            </div>
-                                            <div class="col s1">
-                                                <button class="btn btn-small waves-effect waves-light grey" v-clipboard:copy="path" @click="copied">Copy</button>
-                                            </div>
-                                        </div>
-                                        
-
-
-                                    </div>
-                                </div>
-                                <div id="list-div" class="col s12">
-
-
-                                    <div v-if="!!error" id="error-message">
-                                        {{error}}
-                                    </div>
-
-                                    <json-tree v-if="!error" :this-json="json" :original-json="json" :root="true" :open="true"
-                                        :child-open="false" :close="close" @update="updatePath">
-                                    </json-tree>
-
-
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col s1">
+                      <button class="btn btn-small waves-effect waves-light grey" v-clipboard:copy="path"
+                        @click="copied">Copy</button>
                     </div>
+                  </div>
+
+
+
                 </div>
+              </div>
+              <div id="list-div" class="col s12">
+
+
+                <div v-if="!!error" id="error-message">
+                  {{error}}
+                </div>
+
+                <json-tree v-if="!error" :this-json="json" :original-json="json" :root="true" :open="true"
+                  :child-open="false" :close="close" @update="updatePath">
+                </json-tree>
+
+
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-    </div>
-
-
-    <div style="display: none" type="x-template" id="json-tree">
-        <div :class="{ 'root': root }">
-            <div v-for="(item, keyName) in thisJson">
-                <json-key v-if="isOpen" :close="close" :open="isChildOpen" :child-open="app.allOpen" :key-name="keyName"
-                    :item="item" :original-json="originalJson" @check="clicked(keyName)" @update="sendUpdate">
-                </json-key>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <div style="display: none" type="x-template" id="json-key">
-        <div class="json-key">
+    <div v-show="isOptionsOpen">
 
-            <div class="property" :class="{ 'selected': selected, 'has-more': typeof item === 'object', 'is-open': isOpen, 'is-not-open': !isOpen, 'openable': typeof item === 'object' }" @click="clicked(keyName)">
+      <div class="container">
+        <div class="card-panel grey darken-4 white-text">
+          xdxd
+        </div>
+      </div>
 
-                <span class="state-arrow">
-                    {{typeof item === 'object' && getObjectName(item) != "Null" && isOpen ? "&#9660;" : typeof item === 'object' && getObjectName(item) != "Null" && !isOpen ? "&#9654;" : "-"}}
-                </span>
+    </div>
 
-                <div class="key-name" :title="keyName">
-                    {{ keyName.length >= 64 ? keyName.slice(0, 64)+"…" : keyName }}
-                </div>
+    <input @input="onFileInput" style="display: none" type="file" id="filePicker" accept=".json,.txt,.fdb">
 
-                <div class="value-type">
-                    {{ getObjectName(item) == "Array" ? `Array[${item.length}]` : getObjectName(item)  }}
-                </div>
+  </div>
 
-                <div v-if="typeof item !== 'object'" class="value">
-                    {{ selected ? item : item.length >= 64 ? item.slice(0, 64)+"…" : item }}
-                </div>
 
-            </div>
+  <div style="display: none" type="x-template" id="json-tree">
+    <div :class="{ 'root': root }">
+      <div v-for="(item, keyName) in thisJson">
+        <json-key v-if="isOpen" :close="close" :open="isChildOpen" :child-open="app.allOpen" :key-name="keyName"
+          :item="item" :original-json="originalJson" @check="clicked(keyName)" @update="sendUpdate">
+        </json-key>
+      </div>
+    </div>
+  </div>
 
-            <json-tree v-if="typeof item === 'object' && isOpen" :close="close" :open="isOpen" :child-open="false"
-                :original-json="originalJson" :this-json="item" :root="false" @update="sendUpdate">
-            </json-tree>
+  <div style="display: none" type="x-template" id="json-key">
+    <div class="json-key">
 
+      <div class="property"
+        :class="{ 'selected': selected, 'has-more': typeof item === 'object', 'is-open': isOpen, 'is-not-open': !isOpen, 'openable': typeof item === 'object' }"
+        @click="clicked(keyName)">
+
+        <span class="state-arrow">
+          {{typeof item === 'object' && getObjectName(item) != "Null" && isOpen ? "&#9660;" : typeof item === 'object' && getObjectName(item) != "Null" && !isOpen ? "&#9654;" : "-"}}
+        </span>
+
+        <div class="key-name" :title="keyName">
+          {{ keyName.length >= 64 ? keyName.slice(0, 64)+"…" : keyName }}
         </div>
 
+        <div class="value-type">
+          {{ getObjectName(item) == "Array" ? `Array[${item.length}]` : getObjectName(item)  }}
+        </div>
 
-        <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.min.js"></script>
-        <script type="text/javascript" src="https://cdn.rawgit.com/Inndy/vue-clipboard2/master/dist/vue-clipboard.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <link rel="stylesheet" href="./codemirror/lib/codemirror.css" />
-        <link rel="stylesheet" href="./codemirror/theme/dracula.css" />
-        <script src="./codemirror/lib/codemirror.js"></script>
-        <script src="./codemirror/mode/javascript/javascript.js"></script>
-        <script src="./script.js"></script>
+        <div v-if="typeof item !== 'object'" class="value">
+          {{ selected ? item : item.length >= 64 ? item.slice(0, 64)+"…" : item }}
+        </div>
+
+      </div>
+
+      <json-tree v-if="typeof item === 'object' && isOpen" :close="close" :open="isOpen" :child-open="false"
+        :original-json="originalJson" :this-json="item" :root="false" @update="sendUpdate">
+      </json-tree>
+
+    </div>
+
+
+    <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script type="text/javascript"
+      src="https://cdn.rawgit.com/Inndy/vue-clipboard2/master/dist/vue-clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="./codemirror/theme/dracula.css" />
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <script src="./codemirror/mode/javascript/javascript.js"></script>
+    <script src="./script.js"></script>
 </body>
 
 </html>

@@ -7,7 +7,10 @@ if('serviceWorker' in navigator) {
     });
 }
 
-let app = new Vue({
+/** @type {HTMLInputElement} */
+let filePickerEl;
+
+const app = new Vue({
   el: "#app",
   data: {
     editor: null,
@@ -22,7 +25,8 @@ let app = new Vue({
     error: "",
     close: true,
     defaultPath: "x",
-    appName: "Pson Fath Jinder"
+    appName: "Pson Fath Jinder",
+    isOptionsOpen: false
   },
   // initialize ace editor and load the reader
   mounted: async function() {
@@ -48,6 +52,8 @@ let app = new Vue({
       this.editor.setValue(fetched);
     }
     this.editorPrettify(true);
+
+    filePickerEl = document.querySelector("#filePicker");
       
     setTimeout(()=>{
       requestAnimationFrame(()=>{
@@ -75,11 +81,11 @@ let app = new Vue({
       this.path = newPath;
     },
     copied: function () {
-      M.toast({html:"Copied!", classes: "rounded"})
+      M.toast({html:"Path copied!", classes: "rounded"})
     },
     editorPrettify: function (hideToast) {
       this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()),null,2));
-      if (!hideToast) M.toast({html:"Prettified!", classes: "rounded"});
+      if (hideToast != true) M.toast({html:"Prettified!", classes: "rounded"});
     },
     editorMinify: function () {
       this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()),null,0));
@@ -90,7 +96,7 @@ let app = new Vue({
         this.editor.setValue(JSON.stringify(eval(`var _json = ${this.editor.getValue()}; _json`),null,2));
         M.toast({html:"Successfully fixed!", classes: "rounded"});
       } catch (error) {
-        M.toast({html:"Could not fix! :(", classes: "rounded"});
+        M.toast({html:'<span style="color: #EF5858">Could not fix! :(</span>', classes: "rounded red-text"});
         this.error += `, ${error}`;
       }
     },
@@ -114,8 +120,17 @@ let app = new Vue({
       }
       __toggle()
     },
-    collapseAll: function (max=10) {
+    collapseAll: function () {
       document.querySelectorAll(".json-key .is-open").forEach((e)=>e.click());
+    },
+    openFile: function () {
+      M.toast({html:"Opening file explorer!", classes: "rounded", displayLength: 1000});
+      filePickerEl.click();
+    },
+    onFileInput: async function (e) {
+      M.toast({html:"Reading file!", classes: "rounded", displayLength: 1000});
+      let fileData = await e.target.files[0].text();
+      this.editor.setValue(fileData);
     }
   },
   watch: {
