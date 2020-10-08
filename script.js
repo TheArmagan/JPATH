@@ -48,7 +48,7 @@ const app = new Vue({
     if (_url.searchParams.get("json")) {
       this.editor.setValue(_url.searchParams.get("json"));
     } else if (_url.searchParams.get("fetch")) {
-      let fetched = await fetch(_url.searchParams.get("fetch"), JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d=>d.text());
+      let fetched = await fetch("https://cors-anywhere.herokuapp.com/"+_url.searchParams.get("fetch"), JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d=>d.text());
       this.editor.setValue(fetched);
     }
     this.editorPrettify(true);
