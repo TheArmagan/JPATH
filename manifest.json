@@ -1,0 +1,52 @@
+{
+    "name": "Pson Fath Jinder",
+    "short_name": "PFJ",
+    "icons": [{
+        "src": "icons/icon-128x128.png",
+          "sizes": "128x128",
+          "type": "image/png"
+        }, {
+          "src": "icons/icon-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        }, {
+          "src": "icons/icon-152x152.png",
+          "sizes": "152x152",
+          "type": "image/png"
+        }, {
+          "src": "icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "icons/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        },
+        {
+            "src": "icons/icon-1024x1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-64x64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+      ],
+    "start_url": "/pson-fath-jinder/index.html",
+    "gcm_sender_id": "160205216020521066052106006605210605252",
+    "display": "standalone",
+    "background_color": "#424242",
+    "theme_color": "#212121"
+}
