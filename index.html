@@ -26,7 +26,7 @@
     <nav class="grey darken-4">
       <div class="nav-wrapper">
         <a @click="onTitleClick" href="#" class="left brand-logo">{{appName}}</a>
-        <ul class="right hide-on-med-and-down">
+        <ul class="right">
           <li><a onclick="app.isOptionsOpen = !app.isOptionsOpen"
               href="#">{{isOptionsOpen ? "Home Page" : "Options"}}</a></li>
           <li><a href="//github.com/TheArmagan/pson-fath-jinder">Github</a></li>
@@ -108,7 +108,31 @@
 
       <div class="container">
         <div class="card-panel grey darken-4 white-text">
-          xdxd
+          <div class="row">
+            <div class="input-field col s12">
+              <h3 style="padding-left:0 !important;" class="pad-fix mar0" >Options</h3>
+            </div>
+            <div class="input-field col s12">
+              <input class="white-text" v-model="defaultPath" @blur="read" id="__default_path" type="text">
+              <label for="__default_path">Default Path</label>
+            </div>
+            <div class="input-field col s12">
+              <form action="#">
+                <p>
+                  <label>
+                    <input v-model="pathType" name="__pathType" type="radio" value="js" />
+                    <span>JavaScript</span>
+                  </label>
+                </p>
+                <p>
+                  <label>
+                    <input v-model="pathType" name="__pathType" type="radio" value="py" />
+                    <span>Python</span>
+                  </label>
+                </p>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
 

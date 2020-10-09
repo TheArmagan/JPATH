@@ -24,7 +24,8 @@ const app = new Vue({
     path: "",
     error: "",
     close: true,
-    defaultPath: "x",
+    defaultPath: localStorage.getItem("pfj.defaultPath") || "$",
+    pathType: localStorage.getItem("pfj.pathType") || "js",
     appName: "Pson Fath Jinder",
     isOptionsOpen: false
   },
@@ -100,16 +101,18 @@ const app = new Vue({
         this.error += `, ${error}`;
       }
     },
-    setAPPName: function (name) {
+    setAPPName: function (name="") {
+      if (name.replace(/ +/gm,"").toLowerCase() == "jsonpathfinder") {
+        document.title = "Perish";
+        this.appName = "Perish";
+        return document.body.classList.add("hidden");
+      }
       document.title = name;
       this.appName = name;
     },
     onTitleClick: function () {
       let newName = prompt("What do you want to make the new app name?", this.appName);
       this.setAPPName(newName || this.appName);
-      setTimeout(()=>{
-        this.setAPPName("Pson Fath Jinder");
-      }, 10*1000)
     },
     expandAll: function () {
       function __toggle(i=0) {
@@ -134,8 +137,18 @@ const app = new Vue({
     }
   },
   watch: {
-    defaultPath: function () {
+    defaultPath: function (newVal, oldVal) {
+      localStorage.setItem("pfj.defaultPath",newVal);
+      this.defaultPath = this.defaultPath.replace(/ +/gm,"") || "$";
+      this.path = "";
       this.read();
+      this.collapseAll();
+    },
+    pathType: function (newVal, oldVal) {
+      localStorage.setItem("pfj.pathType",newVal);
+      this.path = "";
+      this.read();
+      this.collapseAll();
     }
   }
 });
@@ -190,24 +203,34 @@ Vue.component("json-tree", {
       for (let item in oldObj) {
         // compare the keys and the objects themselves to find a match
         if (item.toString() === key.toString() && oldObj === newObj) {
-          // put array indices in brackets
-          if (Array.isArray(newObj)) {
-            return `${path}[${item}]`;
-            // put strings with spaces, periods, or brackets in brackets
-          } else if (/[^A-Za-z0-9_$]/.test(item)) {
+          if (app.pathType == "js") {
+            // put array indices in brackets
+            if (Array.isArray(newObj)) {
+              return `${path}[${item}]`;
+              // put strings with spaces, periods, or brackets in brackets
+            } else if (/[^A-Za-z0-9_$]/.test(item)) {
+              return `${path}["${item}"]`;
+              // use dot notation for all else
+            } else {
+              return `${path}.${item}`;
+            }
+
+          } else if (app.pathType == "py") {
             return `${path}["${item}"]`;
-            // use dot notation for all else
-          } else {
-            return `${path}.${item}`;
           }
         }
         else if (typeof oldObj[item] === "object") {
-          if (Array.isArray(oldObj))
+          if (app.pathType == "js") {
+            if (Array.isArray(oldObj))
             newPath = `${path}[${item}]`;
-          else if (/[^A-Za-z0-9_$]/.test(item))
+            else if (/[^A-Za-z0-9_$]/.test(item))
+              newPath = `${path}["${item}"]`;
+            else
+              newPath = `${path}.${item}`;
+          } else if (app.pathType == "py") {
             newPath = `${path}["${item}"]`;
-          else
-            newPath = `${path}.${item}`;
+          }
+
           output = this.searchObject(oldObj[item], newObj, key, newPath) || output;
         }
       }
