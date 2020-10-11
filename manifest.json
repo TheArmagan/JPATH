@@ -1,6 +1,6 @@
 {
-    "name": "Pson Fath Jinder",
-    "short_name": "PFJ",
+    "name": "JPATH",
+    "short_name": "JP",
     "icons": [{
         "src": "icons/icon-128x128.png",
           "sizes": "128x128",
@@ -44,7 +44,7 @@
             "type": "image/png"
         }
       ],
-    "start_url": "/pson-fath-jinder/index.html",
+    "start_url": "/jpath/index.html",
     "gcm_sender_id": "160205216020521066052106006605210605252",
     "display": "standalone",
     "background_color": "#424242",
