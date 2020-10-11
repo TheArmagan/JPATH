@@ -1,4 +1,4 @@
-# Pson Fath Jinder
+# JPATH
 
 ## Features
 - Display JSON data in a collapsible/expandable tree structure

@@ -26,7 +26,7 @@ const app = new Vue({
     close: true,
     defaultPath: localStorage.getItem("pfj.defaultPath") || "$",
     pathType: localStorage.getItem("pfj.pathType") || "js",
-    appName: "Pson Fath Jinder",
+    appName: "JPATH",
     isOptionsOpen: false
   },
   // initialize ace editor and load the reader
