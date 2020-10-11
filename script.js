@@ -55,6 +55,8 @@ const app = new Vue({
     this.editorPrettify(true);
 
     filePickerEl = document.querySelector("#filePicker");
+
+    document.title = this.appName;
       
     setTimeout(()=>{
       requestAnimationFrame(()=>{
