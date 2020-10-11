@@ -11,7 +11,7 @@
 ## TODO
  - Make app "more" mobile friendly..
 
-[Click here to open.](https://thearmagan.github.io/pson-fath-jinder)
-[![Preview](https://i.imgur.com/HN7LYct.png)](https://thearmagan.github.io/pson-fath-jinder)
+> [Click here to open.](https://thearmagan.github.io/JPATH)
+> [![Preview](https://i.imgur.com/Q4xTqDT.png)](https://thearmagan.github.io/JPATH)
 
 Based on [this repo.](https://github.com/joebeachjoebeach/json-path-finder) (fully refactored)
