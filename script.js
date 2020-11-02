@@ -1,5 +1,5 @@
 const _url = new URL(location.href);
-const hastebinRegex = /^https?:\/\/hastebin\.com\/(?:raw\/)?([a-zA-Z0-9]+)$/;
+const hastebinRegex = /^https?:\/\/hastebin\.com\/(?:raw\/)?([a-zA-Z0-9]+)(?:\.json)?/;
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
@@ -47,7 +47,7 @@ const app = new Vue({
             let fetchUrl = _url.searchParams.get("fetch");
 
             if (hastebinRegex.test(fetchUrl)) {
-                fetchUrl = `https://hastebin.com/raw/${fetchUrl.match(hastebinRegex)[0]}`;
+                fetchUrl = `https://hastebin.com/raw/${fetchUrl.match(hastebinRegex)[1]}`;
             }
 
             let fetched = await fetch("https://cors-anywhere.herokuapp.com/" + fetchUrl, JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d => d.text());
@@ -63,6 +63,7 @@ const app = new Vue({
         }
 
 
+        this.editorTryToFix(true);
         this.editorPrettify(true);
 
         filePickerEl = document.querySelector("#filePicker");
@@ -101,16 +102,16 @@ const app = new Vue({
             this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()), null, 2));
             if (hideToast != true) M.toast({ html: "Prettified!", classes: "rounded" });
         },
-        editorMinify: function () {
+        editorMinify: function (hideToast) {
             this.editor.setValue(JSON.stringify(JSON.parse(this.editor.getValue()), null, 0));
-            M.toast({ html: "Minified!", classes: "rounded" });
+            if (hideToast != true) M.toast({ html: "Minified!", classes: "rounded" });
         },
-        editorTryToFix: function () {
+        editorTryToFix: function (hideToast) {
             try {
                 this.editor.setValue(JSON.stringify(eval(`var _json = ${this.editor.getValue()}; _json`), null, 2));
-                M.toast({ html: "Successfully fixed!", classes: "rounded" });
+                if (hideToast != true) M.toast({ html: "Successfully fixed!", classes: "rounded" });
             } catch (error) {
-                M.toast({ html: '<span style="color: #EF5858">Could not fix! :(</span>', classes: "rounded red-text" });
+                if (hideToast != true) M.toast({ html: '<span style="color: #EF5858">Could not fix! :(</span>', classes: "rounded red-text" });
                 this.error += `, ${error}`;
             }
         },
