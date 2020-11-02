@@ -1,4 +1,5 @@
 const _url = new URL(location.href);
+const hastebinRegex = /^https?:\/\/hastebin\.com\/(?:raw\/)?([a-zA-Z0-9]+)$/;
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
@@ -14,13 +15,7 @@ const app = new Vue({
     el: "#app",
     data: {
         editor: null,
-        json: {
-            "instructions": [
-                "Enter your JSON in the editor.",
-                "Select an item to view its path.",
-                "Replace 'x' with the name of your letiable."
-            ]
-        },
+        json: {},
         path: "",
         error: "",
         close: true,
@@ -49,9 +44,25 @@ const app = new Vue({
         if (_url.searchParams.get("json")) {
             this.editor.setValue(_url.searchParams.get("json"));
         } else if (_url.searchParams.get("fetch")) {
-            let fetched = await fetch("https://cors-anywhere.herokuapp.com/" + _url.searchParams.get("fetch"), JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d => d.text());
+            let fetchUrl = _url.searchParams.get("fetch");
+
+            if (hastebinRegex.test(fetchUrl)) {
+                fetchUrl = `https://hastebin.com/raw/${fetchUrl.match(hastebinRegex)[0]}`;
+            }
+
+            let fetched = await fetch("https://cors-anywhere.herokuapp.com/" + fetchUrl, JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d => d.text());
             this.editor.setValue(fetched);
+        } else {
+            this.editor.setValue(`{
+                "instructions": [
+                    "Enter your JSON in the editor.",
+                    "Select an item to view its path.",
+                    "Replace '${this.defaultPath}' with the name of your letiable."
+                ]
+            }`);
         }
+
+
         this.editorPrettify(true);
 
         filePickerEl = document.querySelector("#filePicker");
@@ -104,7 +115,7 @@ const app = new Vue({
             }
         },
         setAPPName: function (name = "") {
-            if (name.replace(/ +/gm, "").toLowerCase() == "jsonpathfinder") {
+            if (name.replace(/[^a-zA-Z0-9]+/gm, "").toLowerCase() == "jsonpathfinder") {
                 document.title = "Perish";
                 this.appName = "Perish";
                 return document.body.classList.add("hidden");
@@ -136,6 +147,15 @@ const app = new Vue({
             M.toast({ html: "Reading file!", classes: "rounded", displayLength: 1000 });
             let fileData = await e.target.files[0].text();
             this.editor.setValue(fileData);
+        },
+        pasteToHastebin: async function (e) {
+            e.target.disabled = true;
+            let loadingToast = M.toast({ html: "Pasting to hastebin please wait...", classes: "rounded", displayLength: Number.MAX_VALUE });
+            let pasteCodeKey = await toHastebin(this.editor.getValue());
+            loadingToast.dismiss();
+            M.toast({ html: `<span>Code pasted successfully!</span><a href="https://hastebin.com/${pasteCodeKey}.json#REF-JPATH" target="_blank"><button class="btn-flat toast-action">GO TO LINK</button></a>`, classes: "rounded", displayLength: 10000 });
+            e.target.disabled = false;
+            console.log("Last Hastebin key:", pasteCodeKey)
         }
     },
     watch: {
@@ -299,5 +319,24 @@ function _parsePath(pathType, obj, item, path) {
                 return `${path}["${item}"]`;
             }
     }
+}
+
+/**
+ * @param {String} text
+ * @returns {String} string of the result hastebin's code.
+ */
+async function toHastebin(text="") {
+
+    let textForPaste = `\n//\n// Paste Date: ${new Date().toDateString()} ${new Date().toTimeString()} \n// You can reopen this file using https://thearmagan.github.io/JPATH/?fetch=HASEBINURL\n//\n\n${text}\n`;
+
+    let pasteResponse = await fetch("https://cors-anywhere.herokuapp.com/https://hastebin.com/documents", {
+        method: "POST",
+        headers: {
+            "content-type": "text/plain"
+        },
+        body: textForPaste
+    }).then(i=>i.json());
+
+    return pasteResponse.key;
 }
 
