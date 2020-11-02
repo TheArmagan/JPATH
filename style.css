@@ -108,6 +108,7 @@ body.hidden {
 	position: relative;
 	background-color: #424242;
 	padding: 0.4rem;
+	word-break: break-all;
 }
 
 .json-key .property:hover {
