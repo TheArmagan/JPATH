@@ -64,7 +64,10 @@ const app = new Vue({
 
 
         this.editorTryToFix(true);
-        this.editorPrettify(true);
+        
+        try {
+            this.editorPrettify(true);
+        } catch {}
 
         filePickerEl = document.querySelector("#filePicker");
 
