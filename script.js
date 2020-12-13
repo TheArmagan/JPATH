@@ -50,7 +50,7 @@ const app = new Vue({
                 fetchUrl = `https://hastebin.com/raw/${fetchUrl.match(hastebinRegex)[1]}`;
             }
 
-            let fetched = await fetch("https://cors-anywhere.herokuapp.com/" + fetchUrl, JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d => d.text());
+            let fetched = await fetch("https://kao-datapipe-3.herokuapp.com/" + fetchUrl, JSON.parse(_url.searchParams.get("fetch-options") || "{}")).then(d => d.text());
             this.editor.setValue(fetched);
         } else {
             this.editor.setValue(`{
