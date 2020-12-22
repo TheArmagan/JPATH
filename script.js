@@ -62,12 +62,11 @@ const app = new Vue({
             }`);
         }
 
-
         this.editorTryToFix(true);
-        
+
         try {
             this.editorPrettify(true);
-        } catch {}
+        } catch { }
 
         filePickerEl = document.querySelector("#filePicker");
 
@@ -88,7 +87,7 @@ const app = new Vue({
                     this.close = !this.close
                 }
 
-                this.json = newJson;
+                this.json = window.json = newJson;
                 this.error = "";
             }
             catch (error) {
@@ -119,7 +118,22 @@ const app = new Vue({
             }
         },
         setAPPName: function (name = "") {
-            if (name.replace(/[^a-zA-Z0-9]+/gm, "").toLowerCase() == "jsonpathfinder") {
+            if ([
+                "jsonpathfinder",
+                "emirgecir",
+                "emirgeçir",
+                "kaanmutlu",
+                "kao",
+                "kıraçarmaganonal",
+                "kiracarmaganonal",
+                "dirt",
+                "dirt8009",
+                "kerim",
+                "torpak",
+                "poğça"
+            ].includes(
+                name.replace(/[^a-zA-Z0-9]+/gm, "").toLowerCase()
+            )) {
                 document.title = "Perish";
                 this.appName = "Perish";
                 return document.body.classList.add("hidden");
@@ -329,7 +343,7 @@ function _parsePath(pathType, obj, item, path) {
  * @param {String} text
  * @returns {String} string of the result hastebin's code.
  */
-async function toHastebin(text="") {
+async function toHastebin(text = "") {
 
     let textForPaste = `\n//\n// Paste Date: ${new Date().toDateString()} ${new Date().toTimeString()} \n// You can reopen this file using https://thearmagan.github.io/JPATH/?fetch=HASEBINURL\n//\n\n${text}\n`;
 
@@ -339,7 +353,7 @@ async function toHastebin(text="") {
             "content-type": "text/plain"
         },
         body: textForPaste
-    }).then(i=>i.json());
+    }).then(i => i.json());
 
     return pasteResponse.key;
 }
