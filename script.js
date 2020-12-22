@@ -87,7 +87,8 @@ const app = new Vue({
                     this.close = !this.close
                 }
 
-                this.json = window.json = newJson;
+                this.json = newJson;
+                window.json = JSON.parse(JSON.stringify(newJson));
                 this.error = "";
             }
             catch (error) {
